@@ -13,7 +13,7 @@
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:background="@android:color/transparent"
         android:fontFamily="@font/montserrat_medium"
         android:gravity="bottom|end"
@@ -39,15 +39,15 @@
         android:text=""
         android:textAlignment="viewEnd"
         android:textColor="@color/white"
-        android:textSize="50sp">
+        android:textSize="30sp">
 
     </TextView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
-        android:orientation="vertical">
+        android:layout_weight="6"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="("
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -102,7 +102,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="AC"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -115,7 +115,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="C"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
                 </LinearLayout>
@@ -143,7 +143,7 @@
                         android:text="sin"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -157,7 +157,7 @@
                         android:text="cos"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -171,7 +171,7 @@
                         android:text="tg"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -185,7 +185,7 @@
                         android:text="log"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -199,7 +199,7 @@
                         android:text="ln"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
                 </LinearLayout>
@@ -227,7 +227,7 @@
                         android:text="x!"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -241,7 +241,7 @@
                         android:text="x²"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -255,7 +255,7 @@
                         android:text="√"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -269,7 +269,7 @@
                         android:text="1/x"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -281,7 +281,7 @@
                         android:background="@color/soft_purple"
                         android:text="÷"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
                 </LinearLayout>
@@ -308,7 +308,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="7"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -321,7 +321,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="8"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -334,7 +334,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="9"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -347,7 +347,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="×"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
                 </LinearLayout>
@@ -374,7 +374,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="4"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -387,7 +387,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="5"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -400,7 +400,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="6"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -412,7 +412,7 @@
                         android:background="@color/soft_purple"
                         android:text="-"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
                 </LinearLayout>
@@ -439,7 +439,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="1"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -452,7 +452,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="2"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -465,7 +465,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="3"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -478,7 +478,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="+"
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
                 </LinearLayout>
@@ -504,7 +504,7 @@
                         android:background="@android:color/transparent"
                         android:text="π"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -517,7 +517,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="0"
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -529,7 +529,7 @@
                         android:background="@android:color/transparent"
                         android:text="."
                         android:textColor="#fff"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
 
@@ -542,7 +542,7 @@
                         android:fontFamily="@font/montserrat_medium"
                         android:text="="
                         android:textColor="@color/white"
-                        android:textSize="30sp">
+                        android:textSize="25sp">
 
                     </Button>
                 </LinearLayout>
