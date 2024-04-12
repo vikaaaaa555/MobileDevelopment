@@ -90,4 +90,9 @@ class MathEvaluator(private val expression: String) {
 
         return x
     }
+
+}
+
+fun eval(expression: String): Double {
+    return MathEvaluator(expression).eval()
 }

@@ -4,18 +4,18 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import com.example.mobiledevelopment.expression_handling.MathEvaluator
+import com.example.mobiledevelopment.expression_handling.eval
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var result: TextView
-    private lateinit var mainTV: TextView
+    private lateinit var result: EditText
+    private lateinit var mainTV: EditText
 
     private lateinit var bBrace1: Button
     private lateinit var bBrace2: Button
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var bMul: Button
     private lateinit var bMin: Button
     private lateinit var bPlus: Button
-    val PI_VALUE: Double = 3.141592
+    private val PI_VALUE: Double = 3.141592
     private lateinit var bPI: Button
     private lateinit var bDot: Button
     private lateinit var bEqual: Button
@@ -56,50 +56,50 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        result = findViewById<TextView>(R.id.result)
-        mainTV = findViewById<TextView>(R.id.operation)
+        result = findViewById(R.id.result)
+        mainTV = findViewById(R.id.operation)
 
-        bBrace1 = findViewById<Button>(R.id.brace1)
-        bBrace2 = findViewById<Button>(R.id.brace2)
-        bAC = findViewById<Button>(R.id.ac)
-        bClear = findViewById<Button>(R.id.clear)
-        bSin = findViewById<Button>(R.id.sin)
-        bCos = findViewById<Button>(R.id.cos)
-        bTan = findViewById<Button>(R.id.tan)
-        bLog = findViewById<Button>(R.id.log)
-        bLn = findViewById<Button>(R.id.ln)
-        bFact = findViewById<Button>(R.id.fact)
-        bSquare = findViewById<Button>(R.id.square)
-        bSqrt = findViewById<Button>(R.id.sqrt)
-        bInv = findViewById<Button>(R.id.inv)
-        bDiv = findViewById<Button>(R.id.div)
+        bBrace1 = findViewById(R.id.brace1)
+        bBrace2 = findViewById(R.id.brace2)
+        bAC = findViewById(R.id.ac)
+        bClear = findViewById(R.id.clear)
+        bSin = findViewById(R.id.sin)
+        bCos = findViewById(R.id.cos)
+        bTan = findViewById(R.id.tan)
+        bLog = findViewById(R.id.log)
+        bLn = findViewById(R.id.ln)
+        bFact = findViewById(R.id.fact)
+        bSquare = findViewById(R.id.square)
+        bSqrt = findViewById(R.id.sqrt)
+        bInv = findViewById(R.id.inv)
+        bDiv = findViewById(R.id.div)
 
-        b1 = findViewById<Button>(R.id.one)
-        b2 = findViewById<Button>(R.id.two)
-        b3 = findViewById<Button>(R.id.three)
-        b4 = findViewById<Button>(R.id.four)
-        b5 = findViewById<Button>(R.id.five)
-        b6 = findViewById<Button>(R.id.six)
-        b7 = findViewById<Button>(R.id.seven)
-        b8 = findViewById<Button>(R.id.eight)
-        b9 = findViewById<Button>(R.id.nine)
-        b0 = findViewById<Button>(R.id.zero)
+        b1 = findViewById(R.id.one)
+        b2 = findViewById(R.id.two)
+        b3 = findViewById(R.id.three)
+        b4 = findViewById(R.id.four)
+        b5 = findViewById(R.id.five)
+        b6 = findViewById(R.id.six)
+        b7 = findViewById(R.id.seven)
+        b8 = findViewById(R.id.eight)
+        b9 = findViewById(R.id.nine)
+        b0 = findViewById(R.id.zero)
 
-        bMul = findViewById<Button>(R.id.mul)
-        bMin = findViewById<Button>(R.id.min)
-        bPlus = findViewById<Button>(R.id.plus)
-        bPI = findViewById<Button>(R.id.pi)
-        bDot = findViewById<Button>(R.id.dot)
-        bEqual = findViewById<Button>(R.id.equal)
+        bMul = findViewById(R.id.mul)
+        bMin = findViewById(R.id.min)
+        bPlus = findViewById(R.id.plus)
+        bPI = findViewById(R.id.pi)
+        bDot = findViewById(R.id.dot)
+        bEqual = findViewById(R.id.equal)
 
         b1.setOnClickListener(View.OnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
                 if (value.isNotEmpty() && value[value.length - 1] == ')') {
-                    mainTV.text = "$value×1"
+                    mainTV.setText("$value×1")
                 } else {
-                    mainTV.text = value + "1"
+                    mainTV.setText(value+"1")
                 }
             } else {
                 Toast.makeText(
@@ -112,11 +112,11 @@ class MainActivity : ComponentActivity() {
         b2.setOnClickListener(View.OnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
-                val `val`: String = mainTV.text.toString()
-                if (`val`.isNotEmpty() && `val`[`val`.length - 1] == ')') {
-                    mainTV.text = "$`val`×2"
+                val value: String = mainTV.text.toString()
+                if (value.isNotEmpty() && value[value.length - 1] == ')') {
+                    mainTV.setText("$value×2")
                 } else {
-                    mainTV.text = `val` + "2"
+                    mainTV.setText(value+"2")
                 }
             } else {
                 Toast.makeText(
@@ -129,11 +129,11 @@ class MainActivity : ComponentActivity() {
         b3.setOnClickListener(View.OnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
-                val `val`: String = mainTV.text.toString()
-                if (`val`.isNotEmpty() && `val`[`val`.length - 1] == ')') {
-                    mainTV.text = "$`val`×3"
+                val value: String = mainTV.text.toString()
+                if (value.isNotEmpty() && value[value.length - 1] == ')') {
+                    mainTV.setText("$value×3")
                 } else {
-                    mainTV.text = `val` + "3"
+                    mainTV.setText(value+"3")
                 }
             } else {
                 Toast.makeText(
@@ -146,11 +146,11 @@ class MainActivity : ComponentActivity() {
         b4.setOnClickListener(View.OnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
-                val `val`: String = mainTV.text.toString()
-                if (`val`.isNotEmpty() && `val`[`val`.length - 1] == ')') {
-                    mainTV.text = "$`val`×4"
+                val value: String = mainTV.text.toString()
+                if (value.isNotEmpty() && value[value.length - 1] == ')') {
+                    mainTV.setText(value+"4")
                 } else {
-                    mainTV.text = `val` + "4"
+                    mainTV.setText(value+"4")
                 }
             } else {
                 Toast.makeText(
@@ -163,11 +163,11 @@ class MainActivity : ComponentActivity() {
         b5.setOnClickListener(View.OnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
-                val `val`: String = mainTV.text.toString()
-                if (`val`.isNotEmpty() && `val`[`val`.length - 1] == ')') {
-                    mainTV.text = "$`val`×5"
+                val value: String = mainTV.text.toString()
+                if (value.isNotEmpty() && value[value.length - 1] == ')') {
+                    mainTV.setText(value+"5")
                 } else {
-                    mainTV.text = `val` + "5"
+                    mainTV.setText(value+"5")
                 }
             } else {
                 Toast.makeText(
@@ -180,11 +180,11 @@ class MainActivity : ComponentActivity() {
         b6.setOnClickListener(View.OnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
-                val `val`: String = mainTV.text.toString()
-                if (`val`.isNotEmpty() && `val`[`val`.length - 1] == ')') {
-                    mainTV.text = "$`val`×6"
+                val value: String = mainTV.text.toString()
+                if (value.isNotEmpty() && value[value.length - 1] == ')') {
+                    mainTV.setText(value+"6")
                 } else {
-                    mainTV.text = `val` + "6"
+                    mainTV.setText(value+"6")
                 }
             } else {
                 Toast.makeText(
@@ -197,11 +197,11 @@ class MainActivity : ComponentActivity() {
         b7.setOnClickListener(View.OnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
-                val `val`: String = mainTV.text.toString()
-                if (`val`.isNotEmpty() && `val`[`val`.length - 1] == ')') {
-                    mainTV.text = "$`val`×7"
+                val value: String = mainTV.text.toString()
+                if (value.isNotEmpty() && value[value.length - 1] == ')') {
+                    mainTV.setText(value+"7")
                 } else {
-                    mainTV.text = `val` + "7"
+                    mainTV.setText(value+"7")
                 }
             } else {
                 Toast.makeText(
@@ -214,11 +214,11 @@ class MainActivity : ComponentActivity() {
         b8.setOnClickListener(View.OnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
-                val `val`: String = mainTV.text.toString()
-                if (`val`.isNotEmpty() && `val`[`val`.length - 1] == ')') {
-                    mainTV.text = "$`val`×8"
+                val value: String = mainTV.text.toString()
+                if (value.isNotEmpty() && value[value.length - 1] == ')') {
+                    mainTV.setText(value+"8")
                 } else {
-                    mainTV.text = `val` + "8"
+                    mainTV.setText(value+"8")
                 }
             } else {
                 Toast.makeText(
@@ -231,11 +231,11 @@ class MainActivity : ComponentActivity() {
         b9.setOnClickListener(View.OnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
-                val `val`: String = mainTV.text.toString()
-                if (`val`.isNotEmpty() && `val`[`val`.length - 1] == ')') {
-                    mainTV.text = "$`val`×9"
+                val value: String = mainTV.text.toString()
+                if (value.isNotEmpty() && value[value.length - 1] == ')') {
+                    mainTV.setText(value+"9")
                 } else {
-                    mainTV.text = `val` + "9"
+                    mainTV.setText(value+"9")
                 }
             } else {
                 Toast.makeText(
@@ -248,11 +248,11 @@ class MainActivity : ComponentActivity() {
         b0.setOnClickListener(View.OnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
-                val `val`: String = mainTV.text.toString()
-                if (`val`.isNotEmpty() && `val`[`val`.length - 1] == ')') {
-                    mainTV.text = "$`val`×0"
+                val value: String = mainTV.text.toString()
+                if (value.isNotEmpty() && value[value.length - 1] == ')') {
+                    mainTV.setText(value+"0")
                 } else {
-                    mainTV.text = `val` + "0"
+                    mainTV.setText(value+"0")
                 }
             } else {
                 Toast.makeText(
@@ -268,31 +268,32 @@ class MainActivity : ComponentActivity() {
                 val value = mainTV.text.toString()
                 val reg = Regex("\\d")
                 if (value.isNotEmpty() && (value.last() == ')' ) || reg.containsMatchIn(value)) {
-                    mainTV.text = "$value×$PI_VALUE"
+                    mainTV.setText(value + PI_VALUE)
                 } else {
-                    mainTV.text = value + "$PI_VALUE"
+                    mainTV.setText(value + PI_VALUE)
                 }
             } else {
-                Toast.makeText(this@MainActivity, "Невозможно ввести более 10 цифр", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Невозможно ввести более 10 цифр",
+                    Toast.LENGTH_SHORT).show()
             }
         }
 
         bDot.setOnClickListener {
             val expression = mainTV.text.toString()
 
-            // Разделяем выражение на отдельные числа и операторы
-            val tokens = expression.split("(?<=[-+*/^()])|(?=[-+*/^()])").toTypedArray()
+            if (expression.isEmpty()) {
+                mainTV.setText("0.")
+            } else {
+                val tokens = expression.split("(?<=[-+*/^()])|(?=[-+*/^()])").toTypedArray()
+                val lastToken = tokens.lastOrNull()
+                val hasDecimalPoint = lastToken?.contains(".") ?: false
 
-            // Проверяем последний токен на наличие десятичной точки
-            val lastToken = tokens[tokens.size - 1]
-            val isAfterBracket = lastToken == ")"
-
-            if (!lastToken.contains(".") && !isAfterBracket) {
-                //После триг. функций хочу, чтобы писалась не просто точка, а "0."
-                if (lastToken.matches("sin|cos|tg|log|ln".toRegex())) {
-                    mainTV.text = expression + "0."
+                if ((lastToken != null) && lastToken.matches("-?\\d+(\\.\\d+)?".toRegex())) {
+                    if (!hasDecimalPoint) {
+                        mainTV.setText("$expression.")
+                    }
                 } else {
-                    mainTV.text = "$expression."
+                    mainTV.setText("$expression.")
                 }
             }
         }
@@ -300,30 +301,30 @@ class MainActivity : ComponentActivity() {
             val expression = mainTV.text.toString()
 
             if (expression.isNotEmpty() && (expression.last() == ')' || expression.last().isDigit())) {
-                mainTV.text = "$expression×("
+                mainTV.setText("$expression×(")
             } else {
-                mainTV.text = "$expression("
+                mainTV.setText("$expression(")
             }
         }
         bBrace2.setOnClickListener {
             val expression = mainTV.text.toString()
 
             if (expression.isNotEmpty() && (expression.last() == ')' || expression.last().isDigit())) {
-                mainTV.text = "$expression)"
+                mainTV.setText("$expression)")
             } else {
-                mainTV.text = "0)"
+                mainTV.setText("0)")
             }
         }
 
         bAC.setOnClickListener {
-            mainTV.text = ""
-            result.text = ""
+            mainTV.setText("")
+            result.setText("")
         }
         bClear.setOnClickListener {
             val valStr = mainTV.text.toString()
             if (valStr.isNotEmpty()) {
                 val newStr = valStr.substring(0, valStr.length - 1)
-                mainTV.text = newStr
+                mainTV.setText(newStr)
             }
         }
 
@@ -343,16 +344,20 @@ class MainActivity : ComponentActivity() {
         bFact.setOnClickListener {
             if (canAddSquareRootOrSquare()) {
                 val valString = mainTV.text.toString().replace(',', '.')
-                if (valString.isEmpty() || isOperator(valString.last()) || valString.last() == ')' || valString.last() == '(') {
-                    Toast.makeText(this@MainActivity, "Введите сначала число для извлечения корня", Toast.LENGTH_SHORT).show()
+                if (valString.isEmpty() || isOperator(valString.last()) || valString.last() == ')'
+                    || valString.last() == '(') {
+                    Toast.makeText(this@MainActivity,
+                        "Введите число для вычисления факториала", Toast.LENGTH_SHORT).show()
                 } else {
                     val intValue = valString.toIntOrNull()
                     if (intValue == null) {
-                        Toast.makeText(this@MainActivity, "Факториал можно вычислить только для целых чисел", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity,
+                            "Факториал можно вычислить только для целых чисел",
+                            Toast.LENGTH_SHORT).show()
                     } else {
                         fun factorial(n: Int): Int = if (n < 2) 1 else n * factorial(n - 1)
                         val res = factorial(intValue)
-                        mainTV.text = res.toString()
+                        mainTV.setText(res.toString())
                     }
                 }
             }
@@ -360,106 +365,144 @@ class MainActivity : ComponentActivity() {
         bSqrt.setOnClickListener {
             if (canAddSquareRootOrSquare()) {
                 val valString = mainTV.text.toString().replace(',', '.')
-                if (valString.isEmpty() || isOperator(valString.last()) || valString.last() == ')' || valString.last() == '(') {
-                    Toast.makeText(this@MainActivity, "Введите сначала число для извлечения корня", Toast.LENGTH_SHORT).show()
+                if (valString.isEmpty() || isOperator(valString.last()) || valString.last() == ')'
+                    || valString.last() == '(') {
+                    Toast.makeText(this@MainActivity,
+                        "Введите число для извлечения корня", Toast.LENGTH_SHORT).show()
                 } else {
                     val res = sqrt(valString.toDouble())
-                    mainTV.text = if (res % 1 == 0.0) {
+                    val resultText = if (res % 1 == 0.0) {
                         res.toInt().toString()
                     } else {
                         res.toString()
                     }
+                    mainTV.setText(resultText)
                 }
             }
         }
         bSquare.setOnClickListener {
             if (canAddSquareRootOrSquare()) {
                 val value = mainTV.text.toString().replace(',', '.')
-                if (value.isEmpty() || isOperator(value.last()) || value.last() == ')' || value.last() == '(') {
-                    Toast.makeText(this@MainActivity, "Введите сначала число для возведения в квадрат", Toast.LENGTH_SHORT).show()
+                if (value.isEmpty() || isOperator(value.last()) || value.last() == ')'
+                    || value.last() == '(') {
+                    Toast.makeText(this@MainActivity,
+                        "Введите число для возведения в квадрат", Toast.LENGTH_SHORT).show()
                 } else {
                     val number = value.toDouble()
                     val res = number.pow(2.0)
-                    mainTV.text = if (res % 1 == 0.0) {
+                    val resultText = if (res % 1 == 0.0) {
                         res.toInt().toString()
                     } else {
                         res.toString()
                     }
+                    mainTV.setText(resultText)
                 }
             }
         }
         bInv.setOnClickListener {
             val value = mainTV.text.toString()
             if(value.isEmpty()) {
-                mainTV.text = "${mainTV.text}1^(-1)"
+                mainTV.setText("${mainTV.text}1^(-1)")
             } else {
-                mainTV.text = "${mainTV.text}^(-1)"
+                mainTV.setText("${mainTV.text}^(-1)")
             }
         }
 
         bSin.setOnClickListener {
-            val expression = mainTV.text.toString()
-
-            if (expression.isNotEmpty() || expression.last() != '(') {
-                mainTV.text = "$expression×sin("
+            val expression = mainTV.text.toString().trim()
+            if(expression.isEmpty()){
+                mainTV.setText("sin(")
             } else {
-                mainTV.text = "sin("
+                val lastChar = expression.lastOrNull()
+                val isLastCharOperator = lastChar!! in "+-×÷("
+
+                val newText = if (isLastCharOperator) {
+                    expression + "sin("
+                } else {
+                    "$expression×sin("
+                }
+                mainTV.setText(newText)
             }
         }
         bCos.setOnClickListener {
-            val expression = mainTV.text.toString()
-
-            if (expression.isNotEmpty() || expression.last() != '(') {
-                mainTV.text = "$expression×cos("
+            val expression = mainTV.text.toString().trim()
+            if(expression.isEmpty()){
+                mainTV.setText("cos(")
             } else {
-                mainTV.text = "cos("
+                val lastChar = expression.lastOrNull()
+                val isLastCharOperator = lastChar!! in "+-×÷("
+
+                val newText = if (isLastCharOperator) {
+                    expression + "cos("
+                } else {
+                    "$expression×cos("
+                }
+                mainTV.setText(newText)
             }
         }
         bTan.setOnClickListener {
-            val expression = mainTV.text.toString()
-
-            if (expression.isNotEmpty() || expression.last() != '(') {
-                mainTV.text = "$expression×tg("
-
+            val expression = mainTV.text.toString().trim()
+            if(expression.isEmpty()){
+                mainTV.setText("tg(")
             } else {
-                mainTV.text = "tg("
+                val lastChar = expression.lastOrNull()
+                val isLastCharOperator = lastChar!! in "+-×÷("
+
+                val newText = if (isLastCharOperator) {
+                    expression + "tg("
+                } else {
+                    "$expression×tg("
+                }
+                mainTV.setText(newText)
             }
         }
         bLog.setOnClickListener {
-            val expression = mainTV.text.toString()
-
-            if (expression.isNotEmpty() || expression.last() != '(') {
-                mainTV.text = "$expression×log("
+            val expression = mainTV.text.toString().trim()
+            if(expression.isEmpty()){
+                mainTV.setText("log(")
             } else {
-                mainTV.text = "log("
+                val lastChar = expression.lastOrNull()
+                val isLastCharOperator = lastChar!! in "+-×÷("
+
+                val newText = if (isLastCharOperator) {
+                    expression + "log("
+                } else {
+                    "$expression×log("
+                }
+                mainTV.setText(newText)
             }
         }
         bLn.setOnClickListener {
-            val expression = mainTV.text.toString()
-
-            if (expression.isNotEmpty() || expression.last() != '(') {
-                val lastChar = expression.last()
-                if (lastChar.isDigit() || lastChar == ')') {
-                    mainTV.text = "$expression×ln("
-                } else {
-                    mainTV.text = "$expression+ln("
-                }
+            val expression = mainTV.text.toString().trim()
+            if(expression.isEmpty()){
+                mainTV.setText("ln(")
             } else {
-                mainTV.text = "ln("
+                val lastChar = expression.lastOrNull()
+                val isLastCharOperator = lastChar!! in "+-×÷("
+
+                val newText = if (isLastCharOperator) {
+                    expression + "ln("
+                } else {
+                    "$expression×ln("
+                }
+                mainTV.setText(newText)
             }
         }
 
         bEqual.setOnClickListener {
             val value = mainTV.text.toString()
-            val replacedStr = value.replace('÷', '/').replace('×', '*').replace(',', '.')
+            val replacedStr = value.replace('÷', '/').replace('×', '*')
+                .replace(',', '.')
             val regex = Regex("[+\\-*/(]$")
             if (replacedStr.isEmpty() || regex.containsMatchIn(replacedStr)) {
-                Toast.makeText(this@MainActivity, "Введите выражение", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Введите выражение",
+                    Toast.LENGTH_SHORT).show()
             } else {
                 try {
                     val resultVal = eval(replacedStr)
                     if (resultVal.isInfinite() || resultVal.isNaN()) {
-                        Toast.makeText(this@MainActivity, "Невозможно выполнить деление на ноль", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity,
+                            "Невозможно выполнить деление на ноль", Toast.LENGTH_SHORT).show()
                     } else {
                         var formattedResult = String.format("%.6f", resultVal)
                         while (formattedResult.last() == '0') {
@@ -468,16 +511,15 @@ class MainActivity : ComponentActivity() {
                         if (formattedResult.last() == '.' || formattedResult.last() == ',') {
                             formattedResult = formattedResult.substring(0, formattedResult.length - 1)
                         }
-                        mainTV.text = formattedResult
-                        result.text = value
+                        mainTV.setText(formattedResult)
+                        result.setText(value)
                     }
                 } catch (e: RuntimeException) {
-                    Toast.makeText(this@MainActivity, "Hекорректное выражение", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "Hекорректное выражение",
+                        Toast.LENGTH_SHORT).show()
                 }
             }
         }
-
-
     }
 
     private fun isOperator(c: Char): Boolean {
@@ -495,8 +537,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun canAddSquareRootOrSquare(): Boolean {
-        val expression: String = mainTV.getText().toString()
-        if (!expression.isEmpty()) {
+        val expression: String = mainTV.text.toString()
+        if (expression.isNotEmpty()) {
             val lastChar = expression[expression.length - 1]
             return !(lastChar == 'n' || lastChar == 's' || lastChar == 'g' || lastChar == 't')
         }
@@ -507,35 +549,34 @@ class MainActivity : ComponentActivity() {
     private fun handleOperatorClick(operator: String) {
         var expression = mainTV.text.toString()
 
-        // Проверяем, если строка пустая или у нас (, то не добавляем оператор
         if (expression.isEmpty() || expression[expression.length - 1] == '(') {
             return
         }
 
-        // Проверяем, если последний символ в строке является оператором,
-        // то заменяем его на новый оператор
         if (isOperator(expression[expression.length - 1])) {
-            // Удаляем последний символ (старый оператор)
             expression = expression.substring(0, expression.length - 1)
         }
 
-        // Добавляем новый оператор к текущему выражению
-        mainTV.text = "$expression$operator"
+        mainTV.setText("$expression$operator")
     }
 
     private fun clearIfOnlyZero() {
         val value = mainTV.text.toString()
         if (value == "0") {
-            mainTV.text = ""
+            mainTV.setText("")
         } else {
-            val newValue = value.replace(Regex("(?<!\\d)0"), "")
+            val newValue = value.replace(Regex("(?<=\\d)0+(?=\\.)"), "")
             if (newValue != value) {
-                mainTV.text = newValue
+                mainTV.setText(newValue)
             }
         }
     }
+
+
+//    @SuppressLint("SetTextI18n")
+//    fun handleRecognizedText(text: String) {
+//        mainTV.setText("$mainTV$text")
+//    }
 }
 
-fun eval(expression: String): Double {
-    return MathEvaluator(expression).eval()
-}
+
