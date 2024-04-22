@@ -1,11 +1,13 @@
 package com.example.mobiledevelopment
 
+import CompassHandler
 import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -62,6 +64,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private lateinit var bEqual: Button
 
     private lateinit var flashClass: FlashClass
+    private lateinit var compassHandler: CompassHandler
+    private lateinit var mediaPlayer: MediaPlayer
 
 //    private lateinit var lSwipeDetector: GestureDetectorCompat
 //    private lateinit var mainLayout: LinearLayout
@@ -87,6 +91,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 //        mainLayout = findViewById(R.id.main_layout)
 
         flashClass = FlashClass(this)
+        compassHandler = CompassHandler(this)
 
         result = findViewById(R.id.result)
         mainTV = findViewById(R.id.operation)
@@ -586,6 +591,31 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         sensorManager?.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
 
+        mediaPlayer = MediaPlayer.create(this, R.raw.eagle_screech)
+        val completionListener = MediaPlayer.OnCompletionListener {
+            mediaPlayer.start()
+        }
+        mediaPlayer.setOnCompletionListener(completionListener)
+        var isSoundPlaying = false
+
+        compassHandler.setOnDirectionChangeListener(object : CompassHandler.OnDirectionChangeListener {
+            override fun onDirectionChanged(direction: Int) {
+                if (direction in 270..359) {
+                    if (!isSoundPlaying) {
+                        mediaPlayer.start()
+                        isSoundPlaying = true
+                    }
+                } else {
+                    if (isSoundPlaying) {
+                        mediaPlayer.setOnCompletionListener {
+                            mediaPlayer.seekTo(0)
+                            isSoundPlaying = false
+                        }
+                    }
+                }
+            }
+        })
+        compassHandler.start()
 
 //        lSwipeDetector = GestureDetectorCompat(this, MyGestureListener())
 //
