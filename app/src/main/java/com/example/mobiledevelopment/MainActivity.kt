@@ -1,18 +1,28 @@
 package com.example.mobiledevelopment
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.core.view.GestureDetectorCompat
 import com.example.mobiledevelopment.expression_handling.FlashClass
 import com.example.mobiledevelopment.expression_handling.eval
+import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), SensorEventListener {
 
     private lateinit var result: EditText
     private lateinit var mainTV: EditText
@@ -44,8 +54,8 @@ class MainActivity : ComponentActivity() {
     private lateinit var b0: Button
 
     private lateinit var bMul: Button
-    lateinit var bMin: Button
-    lateinit var bPlus: Button
+    private lateinit var bMin: Button
+    private lateinit var bPlus: Button
     private val PI_VALUE: Double = 3.141592
     private lateinit var bPI: Button
     private lateinit var bDot: Button
@@ -55,10 +65,14 @@ class MainActivity : ComponentActivity() {
 
 //    private lateinit var lSwipeDetector: GestureDetectorCompat
 //    private lateinit var mainLayout: LinearLayout
-//
-//    private var lastX: Float = 0.0f
-//    private var lastY: Float = 0.0f
-//    private var lastZ: Float = 0.0f
+
+    private var sensorManager: SensorManager? = null
+    private var accelerometer: Sensor? = null
+    private var lastTime: Long = 0
+    private var lastX: Float = 0.0f
+    private var lastY: Float = 0.0f
+    private var lastZ: Float = 0.0f
+    private val shakeThreshold = 600
 //    companion object {
 //        private const val SWIPE_MIN_DISTANCE = 130
 //        private const val SWIPE_MAX_DISTANCE = 300
@@ -568,13 +582,24 @@ class MainActivity : ComponentActivity() {
             flashClass.toggleTorch()
         }
 
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        sensorManager?.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
+
+
 //        lSwipeDetector = GestureDetectorCompat(this, MyGestureListener())
 //
 //        mainLayout.setOnTouchListener { _, event ->
 //            lSwipeDetector.onTouchEvent(event)
 //            true
 //        }
+//
     }
+//
+//    override fun onTouchEvent(event: MotionEvent): Boolean {
+//        lSwipeDetector.onTouchEvent(event)
+//        return super.onTouchEvent(event)
+//    }
 
     private fun isOperator(c: Char): Boolean {
         return c == '+' || c == '-' || c == '×' || c == '÷'
@@ -627,9 +652,56 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
+            val currentTime = System.currentTimeMillis()
+            val diffTime = currentTime - lastTime
+            if (diffTime > 100) {
+                val x = event.values[0]
+                val y = event.values[1]
+                val z = event.values[2]
+                val speed = abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000
+                if (speed > shakeThreshold) {
+                    onShake()
+                }
+                lastX = x
+                lastY = y
+                lastZ = z
+                lastTime = currentTime
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // ничего
+    }
+
+    private fun onShake() {
+        bAC.performClick()
+    }
+
 //    inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
 //        override fun onDown(e: MotionEvent): Boolean {
 //            return true
+//        }
+//
+//        override fun onShowPress(e: MotionEvent) {
+//        }
+//
+//        override fun onSingleTapUp(e: MotionEvent): Boolean {
+//            return true
+//        }
+//
+//        override fun onScroll(
+//            e1: MotionEvent?,
+//            e2: MotionEvent,
+//            distanceX: Float,
+//            distanceY: Float,
+//        ): Boolean {
+//            return true
+//        }
+//
+//        override fun onLongPress(e: MotionEvent) {
 //        }
 //
 //        override fun onFling(
@@ -640,10 +712,10 @@ class MainActivity : ComponentActivity() {
 //        ): Boolean {
 //            val deltaX = e2.x - e1!!.x
 //            val deltaY = e2.y - e1.y
-//            val deltaXAbs = Math.abs(deltaX)
-//            val deltaYAbs = Math.abs(deltaY)
+//            val deltaXAbs = abs(deltaX)
+//            val deltaYAbs = abs(deltaY)
 //
-//            if (deltaXAbs > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_MIN_VELOCITY) {
+//            if (deltaXAbs > SWIPE_MIN_DISTANCE && abs(velocityX) > SWIPE_MIN_VELOCITY) {
 //                if (deltaX > 0) {
 //                    bPlus.performClick()
 //                    //Toast.makeText(this@MainActivity, "Swipe Right", Toast.LENGTH_SHORT).show()
@@ -654,7 +726,7 @@ class MainActivity : ComponentActivity() {
 //                return true
 //            }
 //
-//            if (deltaYAbs > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_MIN_VELOCITY) {
+//            if (deltaYAbs > SWIPE_MIN_DISTANCE && abs(velocityY) > SWIPE_MIN_VELOCITY) {
 //                if (deltaY > 0) {
 //                    bDiv.performClick()
 //                    //Toast.makeText(this@MainActivity, "Swipe Down", Toast.LENGTH_SHORT).show()
