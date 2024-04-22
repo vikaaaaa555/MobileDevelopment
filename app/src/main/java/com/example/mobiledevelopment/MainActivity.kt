@@ -1,28 +1,18 @@
 package com.example.mobiledevelopment
 
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraCharacteristics
-import android.hardware.camera2.CameraManager
-import android.hardware.camera2.CameraMetadata
-import android.os.Build
 import android.os.Bundle
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.GestureDetectorCompat
+import com.example.mobiledevelopment.expression_handling.FlashClass
 import com.example.mobiledevelopment.expression_handling.eval
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 
-class MainActivity : ComponentActivity()/*, GestureDetector.OnGestureListener*/ {
+class MainActivity : ComponentActivity() {
 
     private lateinit var result: EditText
     private lateinit var mainTV: EditText
@@ -61,9 +51,7 @@ class MainActivity : ComponentActivity()/*, GestureDetector.OnGestureListener*/ 
     private lateinit var bDot: Button
     private lateinit var bEqual: Button
 
-    private lateinit var cameraManager: CameraManager
-    private var cameraId: String? = null
-
+    private lateinit var flashClass: FlashClass
 
 //    private lateinit var lSwipeDetector: GestureDetectorCompat
 //    private lateinit var mainLayout: LinearLayout
@@ -84,12 +72,7 @@ class MainActivity : ComponentActivity()/*, GestureDetector.OnGestureListener*/ 
 
 //        mainLayout = findViewById(R.id.main_layout)
 
-        cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
-
-        val equalButton: Button = findViewById(R.id.equal)
-        equalButton.setOnClickListener {
-            toggleFlashlight()
-        }
+        flashClass = FlashClass(this)
 
         result = findViewById(R.id.result)
         mainTV = findViewById(R.id.operation)
@@ -582,7 +565,7 @@ class MainActivity : ComponentActivity()/*, GestureDetector.OnGestureListener*/ 
                     ).show()
                 }
             }
-            toggleFlashlight()
+            flashClass.toggleTorch()
         }
 
 //        lSwipeDetector = GestureDetectorCompat(this, MyGestureListener())
@@ -644,31 +627,6 @@ class MainActivity : ComponentActivity()/*, GestureDetector.OnGestureListener*/ 
         }
     }
 
-    private fun toggleFlashlight() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            try {
-                val hasFlash = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
-                if (hasFlash) {
-                    cameraId = cameraManager.cameraIdList[0]
-                    val flashState = cameraManager.getCameraCharacteristics(cameraId!!).get(
-                        CameraCharacteristics.FLASH_INFO_AVAILABLE)
-                    if (flashState == true) {
-                        val flashMode = if (flashlightState) CameraMetadata.FLASH_MODE_OFF else CameraMetadata.FLASH_MODE_TORCH
-                        cameraManager.setTorchMode(cameraId!!, flashMode)
-                        flashlightState = !flashlightState
-                    }
-                }
-            } catch (e: CameraAccessException) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    companion object {
-        private var flashlightState = false
-    }
-
-
 //    inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
 //        override fun onDown(e: MotionEvent): Boolean {
 //            return true
@@ -710,8 +668,4 @@ class MainActivity : ComponentActivity()/*, GestureDetector.OnGestureListener*/ 
 //            return false
 //        }
 //    }
-}
-
-private fun CameraManager.setTorchMode(cameraId: String, flashMode: Int) {
-
 }
