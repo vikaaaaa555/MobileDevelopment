@@ -1,18 +1,28 @@
 package com.example.mobiledevelopment
 
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
+import android.hardware.camera2.CameraMetadata
+import android.os.Build
 import android.os.Bundle
-import android.view.View
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.GestureDetectorCompat
 import com.example.mobiledevelopment.expression_handling.eval
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity()/*, GestureDetector.OnGestureListener*/ {
 
     private lateinit var result: EditText
     private lateinit var mainTV: EditText
@@ -44,17 +54,42 @@ class MainActivity : ComponentActivity() {
     private lateinit var b0: Button
 
     private lateinit var bMul: Button
-    private lateinit var bMin: Button
-    private lateinit var bPlus: Button
+    lateinit var bMin: Button
+    lateinit var bPlus: Button
     private val PI_VALUE: Double = 3.141592
     private lateinit var bPI: Button
     private lateinit var bDot: Button
     private lateinit var bEqual: Button
 
+    private lateinit var cameraManager: CameraManager
+    private var cameraId: String? = null
+
+
+//    private lateinit var lSwipeDetector: GestureDetectorCompat
+//    private lateinit var mainLayout: LinearLayout
+//
+//    private var lastX: Float = 0.0f
+//    private var lastY: Float = 0.0f
+//    private var lastZ: Float = 0.0f
+//    companion object {
+//        private const val SWIPE_MIN_DISTANCE = 130
+//        private const val SWIPE_MAX_DISTANCE = 300
+//        private const val SWIPE_MIN_VELOCITY = 200
+//    }
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+//        mainLayout = findViewById(R.id.main_layout)
+
+        cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+
+        val equalButton: Button = findViewById(R.id.equal)
+        equalButton.setOnClickListener {
+            toggleFlashlight()
+        }
 
         result = findViewById(R.id.result)
         mainTV = findViewById(R.id.operation)
@@ -92,7 +127,7 @@ class MainActivity : ComponentActivity() {
         bDot = findViewById(R.id.dot)
         bEqual = findViewById(R.id.equal)
 
-        b1.setOnClickListener(View.OnClickListener {
+        b1.setOnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
@@ -108,8 +143,8 @@ class MainActivity : ComponentActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
-        b2.setOnClickListener(View.OnClickListener {
+        }
+        b2.setOnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
@@ -125,8 +160,8 @@ class MainActivity : ComponentActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
-        b3.setOnClickListener(View.OnClickListener {
+        }
+        b3.setOnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
@@ -142,8 +177,8 @@ class MainActivity : ComponentActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
-        b4.setOnClickListener(View.OnClickListener {
+        }
+        b4.setOnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
@@ -159,8 +194,8 @@ class MainActivity : ComponentActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
-        b5.setOnClickListener(View.OnClickListener {
+        }
+        b5.setOnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
@@ -176,8 +211,8 @@ class MainActivity : ComponentActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
-        b6.setOnClickListener(View.OnClickListener {
+        }
+        b6.setOnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
@@ -193,8 +228,8 @@ class MainActivity : ComponentActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
-        b7.setOnClickListener(View.OnClickListener {
+        }
+        b7.setOnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
@@ -210,8 +245,8 @@ class MainActivity : ComponentActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
-        b8.setOnClickListener(View.OnClickListener {
+        }
+        b8.setOnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
@@ -227,8 +262,8 @@ class MainActivity : ComponentActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
-        b9.setOnClickListener(View.OnClickListener {
+        }
+        b9.setOnClickListener{
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
@@ -244,8 +279,8 @@ class MainActivity : ComponentActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
-        b0.setOnClickListener(View.OnClickListener {
+        }
+        b0.setOnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
                 val value: String = mainTV.text.toString()
@@ -261,7 +296,7 @@ class MainActivity : ComponentActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        })
+        }
         bPI.setOnClickListener {
             clearIfOnlyZero()
             if (!isLargeNumber()) {
@@ -273,46 +308,59 @@ class MainActivity : ComponentActivity() {
                     mainTV.setText(value + PI_VALUE)
                 }
             } else {
-                Toast.makeText(this@MainActivity, "Невозможно ввести более 10 цифр",
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Невозможно ввести более 10 цифр",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
         bDot.setOnClickListener {
-            val expression = mainTV.text.toString()
+            val expression: String = mainTV.text.toString()
 
-            if (expression.isEmpty()) {
-                mainTV.setText("0.")
-            } else {
-                val tokens = expression.split("(?<=[-+*/^()])|(?=[-+*/^()])").toTypedArray()
-                val lastToken = tokens.lastOrNull()
-                val hasDecimalPoint = lastToken?.contains(".") ?: false
+            val tokens = expression.split("(?<=[-+*/^()])|(?=[-+*/^()])".toRegex())
+                .dropLastWhile { it.isEmpty() }
+                .toTypedArray()
 
-                if ((lastToken != null) && lastToken.matches("-?\\d+(\\.\\d+)?".toRegex())) {
-                    if (!hasDecimalPoint) {
-                        mainTV.setText("$expression.")
-                    }
+            val lastToken = tokens[tokens.size - 1]
+            val isAfterBracket = lastToken == ")"
+            if (!lastToken.contains(".") && !isAfterBracket) {
+                // "\\(|\\+|-|×|÷"
+                if (lastToken.matches("[(+\\-×÷]".toRegex())) {
+                    mainTV.setText(expression + "0.")
                 } else {
                     mainTV.setText("$expression.")
                 }
             }
         }
         bBrace1.setOnClickListener {
-            val expression = mainTV.text.toString()
-
-            if (expression.isNotEmpty() && (expression.last() == ')' || expression.last().isDigit())) {
+            val expression: String = mainTV.text.toString()
+            if (expression[expression.length - 1] == ')' || Character.isDigit(expression[expression.length - 1])) {
                 mainTV.setText("$expression×(")
+            } else if(expression[expression.length - 1] == '.'){
+                mainTV.setText(expression + "0×(")
             } else {
                 mainTV.setText("$expression(")
             }
         }
         bBrace2.setOnClickListener {
-            val expression = mainTV.text.toString()
+            val expression: String = mainTV.text.toString()
+            var openBracketCount = 0
+            var closeBracketCount = 0
 
-            if (expression.isNotEmpty() && (expression.last() == ')' || expression.last().isDigit())) {
+            for (c in expression.toCharArray()) {
+                if (c == '(') {
+                    openBracketCount++
+                } else if (c == ')') {
+                    closeBracketCount++
+                }
+            }
+            if (openBracketCount > closeBracketCount && (expression.isEmpty() || Character.isDigit(
+                    expression[expression.length - 1]
+                ) || expression[expression.length - 1] == ')')
+            ) {
                 mainTV.setText("$expression)")
-            } else {
-                mainTV.setText("0)")
             }
         }
 
@@ -346,14 +394,19 @@ class MainActivity : ComponentActivity() {
                 val valString = mainTV.text.toString().replace(',', '.')
                 if (valString.isEmpty() || isOperator(valString.last()) || valString.last() == ')'
                     || valString.last() == '(') {
-                    Toast.makeText(this@MainActivity,
-                        "Введите число для вычисления факториала", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Введите число для вычисления факториала",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     val intValue = valString.toIntOrNull()
                     if (intValue == null) {
-                        Toast.makeText(this@MainActivity,
+                        Toast.makeText(
+                            this@MainActivity,
                             "Факториал можно вычислить только для целых чисел",
-                            Toast.LENGTH_SHORT).show()
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
                         fun factorial(n: Int): Int = if (n < 2) 1 else n * factorial(n - 1)
                         val res = factorial(intValue)
@@ -367,8 +420,11 @@ class MainActivity : ComponentActivity() {
                 val valString = mainTV.text.toString().replace(',', '.')
                 if (valString.isEmpty() || isOperator(valString.last()) || valString.last() == ')'
                     || valString.last() == '(') {
-                    Toast.makeText(this@MainActivity,
-                        "Введите число для извлечения корня", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Введите число для извлечения корня",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     val res = sqrt(valString.toDouble())
                     val resultText = if (res % 1 == 0.0) {
@@ -385,17 +441,15 @@ class MainActivity : ComponentActivity() {
                 val value = mainTV.text.toString().replace(',', '.')
                 if (value.isEmpty() || isOperator(value.last()) || value.last() == ')'
                     || value.last() == '(') {
-                    Toast.makeText(this@MainActivity,
-                        "Введите число для возведения в квадрат", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Введите число для возведения в квадрат",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     val number = value.toDouble()
                     val res = number.pow(2.0)
-                    val resultText = if (res % 1 == 0.0) {
-                        res.toInt().toString()
-                    } else {
-                        res.toString()
-                    }
-                    mainTV.setText(resultText)
+                    mainTV.setText(res.toString())
                 }
             }
         }
@@ -495,14 +549,20 @@ class MainActivity : ComponentActivity() {
                 .replace(',', '.')
             val regex = Regex("[+\\-*/(]$")
             if (replacedStr.isEmpty() || regex.containsMatchIn(replacedStr)) {
-                Toast.makeText(this@MainActivity, "Введите выражение",
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Введите выражение",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 try {
                     val resultVal = eval(replacedStr)
                     if (resultVal.isInfinite() || resultVal.isNaN()) {
-                        Toast.makeText(this@MainActivity,
-                            "Невозможно выполнить деление на ноль", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Невозможно выполнить деление на ноль",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
                         var formattedResult = String.format("%.6f", resultVal)
                         while (formattedResult.last() == '0') {
@@ -515,11 +575,22 @@ class MainActivity : ComponentActivity() {
                         result.setText(value)
                     }
                 } catch (e: RuntimeException) {
-                    Toast.makeText(this@MainActivity, "Hекорректное выражение",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Hекорректное выражение",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
+            toggleFlashlight()
         }
+
+//        lSwipeDetector = GestureDetectorCompat(this, MyGestureListener())
+//
+//        mainLayout.setOnTouchListener { _, event ->
+//            lSwipeDetector.onTouchEvent(event)
+//            true
+//        }
     }
 
     private fun isOperator(c: Char): Boolean {
@@ -549,7 +620,8 @@ class MainActivity : ComponentActivity() {
     private fun handleOperatorClick(operator: String) {
         var expression = mainTV.text.toString()
 
-        if (expression.isEmpty() || expression[expression.length - 1] == '(') {
+        if (expression.isEmpty() || expression[expression.length - 1] == '('
+            || expression[expression.length - 1] == '.') {
             return
         }
 
@@ -572,11 +644,74 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun toggleFlashlight() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                val hasFlash = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
+                if (hasFlash) {
+                    cameraId = cameraManager.cameraIdList[0]
+                    val flashState = cameraManager.getCameraCharacteristics(cameraId!!).get(
+                        CameraCharacteristics.FLASH_INFO_AVAILABLE)
+                    if (flashState == true) {
+                        val flashMode = if (flashlightState) CameraMetadata.FLASH_MODE_OFF else CameraMetadata.FLASH_MODE_TORCH
+                        cameraManager.setTorchMode(cameraId!!, flashMode)
+                        flashlightState = !flashlightState
+                    }
+                }
+            } catch (e: CameraAccessException) {
+                e.printStackTrace()
+            }
+        }
+    }
 
-//    @SuppressLint("SetTextI18n")
-//    fun handleRecognizedText(text: String) {
-//        mainTV.setText("$mainTV$text")
+    companion object {
+        private var flashlightState = false
+    }
+
+
+//    inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
+//        override fun onDown(e: MotionEvent): Boolean {
+//            return true
+//        }
+//
+//        override fun onFling(
+//            e1: MotionEvent?,
+//            e2: MotionEvent,
+//            velocityX: Float,
+//            velocityY: Float
+//        ): Boolean {
+//            val deltaX = e2.x - e1!!.x
+//            val deltaY = e2.y - e1.y
+//            val deltaXAbs = Math.abs(deltaX)
+//            val deltaYAbs = Math.abs(deltaY)
+//
+//            if (deltaXAbs > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_MIN_VELOCITY) {
+//                if (deltaX > 0) {
+//                    bPlus.performClick()
+//                    //Toast.makeText(this@MainActivity, "Swipe Right", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    bMin.performClick()
+//                    //Toast.makeText(this@MainActivity, "Swipe Left", Toast.LENGTH_SHORT).show()
+//                }
+//                return true
+//            }
+//
+//            if (deltaYAbs > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_MIN_VELOCITY) {
+//                if (deltaY > 0) {
+//                    bDiv.performClick()
+//                    //Toast.makeText(this@MainActivity, "Swipe Down", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    bMul.performClick()
+//                    //Toast.makeText(this@MainActivity, "Swipe Up", Toast.LENGTH_SHORT).show()
+//                }
+//                return true
+//            }
+//
+//            return false
+//        }
 //    }
 }
 
+private fun CameraManager.setTorchMode(cameraId: String, flashMode: Int) {
 
+}
