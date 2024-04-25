@@ -8,13 +8,31 @@
     android:orientation="vertical"
     android:weightSum="10"
     android:background="@drawable/background"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_weight="1"
         android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/theme_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:drawableEnd="@drawable/brush">
+
+        </Button>
+
+        <Button
+            android:id="@+id/history_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:drawableEnd="@drawable/reset">
+
+        </Button>
 
 
         <EditText
@@ -28,7 +46,8 @@
             android:text=""
             android:textAlignment="viewEnd"
             android:textColor="@color/white"
-            android:textSize="20sp">
+            android:textSize="20sp"
+            android:enabled="false">
 
         </EditText>
     </LinearLayout>

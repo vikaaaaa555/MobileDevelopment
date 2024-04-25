@@ -1,30 +1,37 @@
-package com.example.mobiledevelopment
+package com.example.mobiledevelopment.activities
 
 import CompassHandler
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.core.view.GestureDetectorCompat
+import com.example.mobiledevelopment.R
 import com.example.mobiledevelopment.expression_handling.FlashClass
 import com.example.mobiledevelopment.expression_handling.eval
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.firestore
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 
 class MainActivity : ComponentActivity(), SensorEventListener {
+
+    val db = Firebase.firestore
+    val resultCollection = db.collection("results")
+
+    private lateinit var bTheme: Button
+    private lateinit var bHistory: Button
 
     private lateinit var result: EditText
     private lateinit var mainTV: EditText
@@ -67,9 +74,6 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private lateinit var compassHandler: CompassHandler
     private lateinit var mediaPlayer: MediaPlayer
 
-//    private lateinit var lSwipeDetector: GestureDetectorCompat
-//    private lateinit var mainLayout: LinearLayout
-
     private var sensorManager: SensorManager? = null
     private var accelerometer: Sensor? = null
     private var lastTime: Long = 0
@@ -77,21 +81,17 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private var lastY: Float = 0.0f
     private var lastZ: Float = 0.0f
     private val shakeThreshold = 600
-//    companion object {
-//        private const val SWIPE_MIN_DISTANCE = 130
-//        private const val SWIPE_MAX_DISTANCE = 300
-//        private const val SWIPE_MIN_VELOCITY = 200
-//    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        mainLayout = findViewById(R.id.main_layout)
-
         flashClass = FlashClass(this)
         compassHandler = CompassHandler(this)
+
+        bTheme = findViewById(R.id.theme_btn)
+        bHistory = findViewById(R.id.history_btn)
 
         result = findViewById(R.id.result)
         mainTV = findViewById(R.id.operation)
@@ -575,6 +575,30 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                         }
                         mainTV.setText(formattedResult)
                         result.setText(value)
+
+
+                        val resultData = hashMapOf(
+                            "expression" to value,
+                            "timestamp" to FieldValue.serverTimestamp()
+                        )
+
+                        db.collection("results")
+                            .add(resultData)
+                            .addOnSuccessListener { documentReference ->
+//                                Toast.makeText(
+//                                    this@MainActivity,
+//                                    "Результат успешно сохранен",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "Ошибка при сохранении результата: $e",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
                     }
                 } catch (e: RuntimeException) {
                     Toast.makeText(
@@ -585,6 +609,11 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                 }
             }
             flashClass.toggleTorch()
+        }
+
+        bHistory.setOnClickListener {
+            startActivity(Intent(this, HistoryActivity::class.java))
+            finish()
         }
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -616,20 +645,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
             }
         })
         compassHandler.start()
-
-//        lSwipeDetector = GestureDetectorCompat(this, MyGestureListener())
-//
-//        mainLayout.setOnTouchListener { _, event ->
-//            lSwipeDetector.onTouchEvent(event)
-//            true
-//        }
-//
     }
-//
-//    override fun onTouchEvent(event: MotionEvent): Boolean {
-//        lSwipeDetector.onTouchEvent(event)
-//        return super.onTouchEvent(event)
-//    }
+
 
     private fun isOperator(c: Char): Boolean {
         return c == '+' || c == '-' || c == '×' || c == '÷'
@@ -709,65 +726,4 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private fun onShake() {
         bAC.performClick()
     }
-
-//    inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
-//        override fun onDown(e: MotionEvent): Boolean {
-//            return true
-//        }
-//
-//        override fun onShowPress(e: MotionEvent) {
-//        }
-//
-//        override fun onSingleTapUp(e: MotionEvent): Boolean {
-//            return true
-//        }
-//
-//        override fun onScroll(
-//            e1: MotionEvent?,
-//            e2: MotionEvent,
-//            distanceX: Float,
-//            distanceY: Float,
-//        ): Boolean {
-//            return true
-//        }
-//
-//        override fun onLongPress(e: MotionEvent) {
-//        }
-//
-//        override fun onFling(
-//            e1: MotionEvent?,
-//            e2: MotionEvent,
-//            velocityX: Float,
-//            velocityY: Float
-//        ): Boolean {
-//            val deltaX = e2.x - e1!!.x
-//            val deltaY = e2.y - e1.y
-//            val deltaXAbs = abs(deltaX)
-//            val deltaYAbs = abs(deltaY)
-//
-//            if (deltaXAbs > SWIPE_MIN_DISTANCE && abs(velocityX) > SWIPE_MIN_VELOCITY) {
-//                if (deltaX > 0) {
-//                    bPlus.performClick()
-//                    //Toast.makeText(this@MainActivity, "Swipe Right", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    bMin.performClick()
-//                    //Toast.makeText(this@MainActivity, "Swipe Left", Toast.LENGTH_SHORT).show()
-//                }
-//                return true
-//            }
-//
-//            if (deltaYAbs > SWIPE_MIN_DISTANCE && abs(velocityY) > SWIPE_MIN_VELOCITY) {
-//                if (deltaY > 0) {
-//                    bDiv.performClick()
-//                    //Toast.makeText(this@MainActivity, "Swipe Down", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    bMul.performClick()
-//                    //Toast.makeText(this@MainActivity, "Swipe Up", Toast.LENGTH_SHORT).show()
-//                }
-//                return true
-//            }
-//
-//            return false
-//        }
-//    }
 }
