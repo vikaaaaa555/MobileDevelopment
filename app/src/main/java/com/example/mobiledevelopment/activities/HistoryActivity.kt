@@ -39,13 +39,18 @@ class HistoryActivity : AppCompatActivity() {
 
         bDelete.setOnClickListener {
             val collectionRef = db.collection("results")
-            collectionRef.get().addOnSuccessListener { querySnapshot ->
+            collectionRef
+                .get()
+                .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot.documents) {
                     document.reference.delete()
                 }
-                Toast.makeText(this, "Все документы удалены", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Все документы удалены",
+                    Toast.LENGTH_SHORT)
+                    .show()
             }
-            loadFirestoreData()
         }
 
         applySavedTheme()
@@ -77,10 +82,8 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun applyTheme(themeId: Int) {
-        //val orientation = resources.configuration.orientation
         when (themeId) {
             1 -> {
-                //window.statusBarColor = ContextCompat.getColor(this, R.color.base)
 
                 val constraintLayout: RelativeLayout = findViewById(R.id.his_layout)
                 val gradientDrawable = ContextCompat.getDrawable(this, R.drawable.background)
@@ -88,15 +91,10 @@ class HistoryActivity : AppCompatActivity() {
 
             }
             2 -> {
-                //window.statusBarColor = ContextCompat.getColor(this, R.color.green)
 
                 val constraintLayout: RelativeLayout = findViewById(R.id.his_layout)
                 val gradientDrawable = ContextCompat.getDrawable(this, R.drawable.green_background)
                 constraintLayout.background = gradientDrawable
-            }
-            else -> {
-                //window.statusBarColor = ContextCompat.getColor(this, R.color.base)
-
             }
         }
     }

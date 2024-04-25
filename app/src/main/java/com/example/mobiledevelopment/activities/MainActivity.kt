@@ -12,6 +12,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
@@ -33,8 +34,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     val db = Firebase.firestore
     val resultCollection = db.collection("results")
 
-    private lateinit var bTheme: Button
-    private lateinit var bHistory: Button
+    private lateinit var bTheme: ImageButton
+    private lateinit var bHistory: ImageButton
 
     private lateinit var result: EditText
     private lateinit var mainTV: EditText

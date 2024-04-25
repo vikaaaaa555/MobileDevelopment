@@ -16,23 +16,25 @@
         android:layout_weight="1"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/theme_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            android:drawableEnd="@drawable/brush">
+            android:src="@drawable/brush"
+            android:padding="10dp">
 
-        </Button>
+        </ImageButton>
 
-        <Button
+        <ImageButton
             android:id="@+id/history_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            android:drawableEnd="@drawable/reset">
+            android:src="@drawable/reset"
+            android:padding="10dp">
 
-        </Button>
+        </ImageButton>
 
 
         <EditText
