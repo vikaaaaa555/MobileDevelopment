@@ -9,4 +9,11 @@
     <color name="back2">#150830</color>
     <color name="back3">#4D1442</color>
     <color name="soft_purple">#7B406C</color>
+
+    <color name="green_back1">#3BB03B</color>
+    <color name="green_back2">#0B610B</color>
+    <color name="green_back3">#043F04</color>
+    <color name="mint">#5AB05A</color>
+
+    <color name="deep_blue">#112252</color>
 </resources>

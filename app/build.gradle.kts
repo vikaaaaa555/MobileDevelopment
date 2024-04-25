@@ -69,14 +69,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
-//    val cameraVersion = "1.3.2"
-//    implementation("androidx.camera:camera-core:$cameraVersion")
-//    implementation("androidx.camera:camera-camera2:$cameraVersion")
-//    implementation("androidx.camera:camera-lifecycle:$cameraVersion")
-//    implementation("androidx.camera:camera-view:$cameraVersion")
-//    implementation("com.google.firebase:firebase-ml-vision:24.1.0") {
-//        exclude(group = "com.google.android.gms", module = "play-services-vision-common")
-//    }
+    implementation("com.google.firebase:firebase-messaging-ktx")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

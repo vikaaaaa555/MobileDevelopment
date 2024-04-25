@@ -4,15 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.mobiledevelopment.R
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.Firebase
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.firestore
 
 class HistoryActivity : AppCompatActivity() {
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val db = Firebase.firestore
     private lateinit var historyTV: TextView
     private lateinit var bClose: ImageButton
     private lateinit var bDelete: Button
@@ -43,6 +47,8 @@ class HistoryActivity : AppCompatActivity() {
             }
             loadFirestoreData()
         }
+
+        applySavedTheme()
     }
 
     private fun loadFirestoreData() {
@@ -61,12 +67,57 @@ class HistoryActivity : AppCompatActivity() {
 
                 historyTV.text = data.toString()
             }
-            .addOnFailureListener { exception ->
+            .addOnFailureListener {
                 Toast.makeText(
                     this@HistoryActivity,
                     "Коллекция пуста",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+    }
+
+    private fun applyTheme(themeId: Int) {
+        //val orientation = resources.configuration.orientation
+        when (themeId) {
+            1 -> {
+                //window.statusBarColor = ContextCompat.getColor(this, R.color.base)
+
+                val constraintLayout: RelativeLayout = findViewById(R.id.his_layout)
+                val gradientDrawable = ContextCompat.getDrawable(this, R.drawable.background)
+                constraintLayout.background = gradientDrawable
+
+            }
+            2 -> {
+                //window.statusBarColor = ContextCompat.getColor(this, R.color.green)
+
+                val constraintLayout: RelativeLayout = findViewById(R.id.his_layout)
+                val gradientDrawable = ContextCompat.getDrawable(this, R.drawable.green_background)
+                constraintLayout.background = gradientDrawable
+            }
+            else -> {
+                //window.statusBarColor = ContextCompat.getColor(this, R.color.base)
+
+            }
+        }
+    }
+
+    private fun applySavedTheme() {
+        db.collection("theme")
+            .document("p0dlz6suAzc1ZgwHZQE0")
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                val dbThemeId = documentSnapshot
+                    .getLong("id")
+                    ?.toInt() ?: return@addOnSuccessListener
+                //setAppTheme(dbThemeId)
+                applyTheme(dbThemeId)
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    this@HistoryActivity,
+                    "Failed to read theme ID from Firestore!",
+                    Toast.LENGTH_SHORT)
+                    .show()
             }
     }
 }

@@ -12,8 +12,11 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.core.content.ContextCompat
 import com.example.mobiledevelopment.R
 import com.example.mobiledevelopment.expression_handling.FlashClass
 import com.example.mobiledevelopment.expression_handling.eval
@@ -584,7 +587,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
                         db.collection("results")
                             .add(resultData)
-                            .addOnSuccessListener { documentReference ->
+                            .addOnSuccessListener {
 //                                Toast.makeText(
 //                                    this@MainActivity,
 //                                    "Результат успешно сохранен",
@@ -609,6 +612,11 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                 }
             }
             flashClass.toggleTorch()
+        }
+
+        bTheme.setOnClickListener {
+            startActivity(Intent(this, ThemeActivity::class.java))
+            finish()
         }
 
         bHistory.setOnClickListener {
@@ -645,6 +653,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
             }
         })
         compassHandler.start()
+        applySavedTheme()
     }
 
 
@@ -725,5 +734,93 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     private fun onShake() {
         bAC.performClick()
+    }
+
+    private fun applyTheme(themeId: Int) {
+        //val orientation = resources.configuration.orientation
+        when (themeId) {
+            1 -> {
+                //window.statusBarColor = ContextCompat.getColor(this, R.color.base)
+
+                val constraintLayout: LinearLayout = findViewById(R.id.main_layout)
+                val gradientDrawable = ContextCompat.getDrawable(this, R.drawable.background)
+                constraintLayout.background = gradientDrawable
+
+                setButtonColor(R.color.soft_purple)
+            }
+            2 -> {
+                //window.statusBarColor = ContextCompat.getColor(this, R.color.green)
+
+                val constraintLayout: LinearLayout = findViewById(R.id.main_layout)
+                val gradientDrawable = ContextCompat.getDrawable(this, R.drawable.green_background)
+                constraintLayout.background = gradientDrawable
+
+                setButtonColor(R.color.mint)
+            }
+            else -> {
+                //window.statusBarColor = ContextCompat.getColor(this, R.color.base)
+
+                setButtonColor(R.color.soft_purple)
+            }
+        }
+    }
+
+    private fun applySavedTheme() {
+        db.collection("theme")
+            .document("p0dlz6suAzc1ZgwHZQE0")
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                val dbThemeId = documentSnapshot
+                    .getLong("id")
+                    ?.toInt() ?: return@addOnSuccessListener
+                //setAppTheme(dbThemeId)
+                applyTheme(dbThemeId)
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    this@MainActivity,
+                    "Failed to read theme ID from Firestore!",
+                    Toast.LENGTH_SHORT)
+                    .show()
+            }
+    }
+
+    fun setButtonColor(colorResId: Int) {
+        bBrace1 = findViewById(R.id.brace1)
+        bBrace1.setBackgroundColor(getResources().getColor(colorResId))
+        bBrace2 = findViewById(R.id.brace2)
+        bBrace2.setBackgroundColor(getResources().getColor(colorResId))
+        bAC = findViewById(R.id.ac)
+        bAC.setBackgroundColor(getResources().getColor(colorResId))
+        bClear = findViewById(R.id.clear)
+        bClear.setBackgroundColor(getResources().getColor(colorResId))
+        bSin = findViewById(R.id.sin)
+        bSin.setBackgroundColor(getResources().getColor(colorResId))
+        bCos = findViewById(R.id.cos)
+        bCos.setBackgroundColor(getResources().getColor(colorResId))
+        bTan = findViewById(R.id.tan)
+        bTan.setBackgroundColor(getResources().getColor(colorResId))
+        bLog = findViewById(R.id.log)
+        bLog.setBackgroundColor(getResources().getColor(colorResId))
+        bLn = findViewById(R.id.ln)
+        bLn.setBackgroundColor(getResources().getColor(colorResId))
+        bFact = findViewById(R.id.fact)
+        bFact.setBackgroundColor(getResources().getColor(colorResId))
+        bSquare = findViewById(R.id.square)
+        bSquare.setBackgroundColor(getResources().getColor(colorResId))
+        bSqrt = findViewById(R.id.sqrt)
+        bSqrt.setBackgroundColor(getResources().getColor(colorResId))
+        bInv = findViewById(R.id.inv)
+        bInv.setBackgroundColor(getResources().getColor(colorResId))
+        bDiv = findViewById(R.id.div)
+        bDiv.setBackgroundColor(getResources().getColor(colorResId))
+        bMul = findViewById(R.id.mul)
+        bMul.setBackgroundColor(getResources().getColor(colorResId))
+        bMin = findViewById(R.id.min)
+        bMin.setBackgroundColor(getResources().getColor(colorResId))
+        bPlus = findViewById(R.id.plus)
+        bPlus.setBackgroundColor(getResources().getColor(colorResId))
+        bEqual = findViewById(R.id.equal)
+        bEqual.setBackgroundColor(getResources().getColor(colorResId))
     }
 }
