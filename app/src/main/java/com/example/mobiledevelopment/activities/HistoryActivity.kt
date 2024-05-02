@@ -47,10 +47,11 @@ class HistoryActivity : AppCompatActivity() {
                 }
                 Toast.makeText(
                     this,
-                    "Все документы удалены",
-                    Toast.LENGTH_SHORT)
-                    .show()
+                    "История очищена",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+            loadFirestoreData()
         }
 
         applySavedTheme()
@@ -75,7 +76,7 @@ class HistoryActivity : AppCompatActivity() {
             .addOnFailureListener {
                 Toast.makeText(
                     this@HistoryActivity,
-                    "Коллекция пуста",
+                    "История пуста",
                     Toast.LENGTH_SHORT
                 ).show()
             }

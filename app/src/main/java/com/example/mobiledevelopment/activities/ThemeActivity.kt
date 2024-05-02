@@ -76,11 +76,11 @@ class ThemeActivity: AppCompatActivity() {
             .document("p0dlz6suAzc1ZgwHZQE0")
             .set(themeData)
             .addOnSuccessListener {
-                Toast.makeText(
-                    this@ThemeActivity,
-                    "Theme ID successfully written to Firestore!",
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    this@ThemeActivity,
+//                    "Theme ID successfully written to Firestore!",
+//                    Toast.LENGTH_SHORT
+//                ).show()
                 changeTheme(themeId)
             }
             .addOnFailureListener {

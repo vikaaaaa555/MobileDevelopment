@@ -638,7 +638,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
         compassHandler.setOnDirectionChangeListener(object : CompassHandler.OnDirectionChangeListener {
             override fun onDirectionChanged(direction: Int) {
-                if (direction in 270..359) {
+                if (direction in 230..299) {
                     if (!isSoundPlaying) {
                         mediaPlayer.start()
                         isSoundPlaying = true
@@ -786,42 +786,42 @@ class MainActivity : ComponentActivity(), SensorEventListener {
             }
     }
 
-    fun setButtonColor(colorResId: Int) {
+    private fun setButtonColor(colorResId: Int) {
         bBrace1 = findViewById(R.id.brace1)
-        bBrace1.setBackgroundColor(getResources().getColor(colorResId))
+        bBrace1.setBackgroundColor(resources.getColor(colorResId))
         bBrace2 = findViewById(R.id.brace2)
-        bBrace2.setBackgroundColor(getResources().getColor(colorResId))
+        bBrace2.setBackgroundColor(resources.getColor(colorResId))
         bAC = findViewById(R.id.ac)
-        bAC.setBackgroundColor(getResources().getColor(colorResId))
+        bAC.setBackgroundColor(resources.getColor(colorResId))
         bClear = findViewById(R.id.clear)
-        bClear.setBackgroundColor(getResources().getColor(colorResId))
+        bClear.setBackgroundColor(resources.getColor(colorResId))
         bSin = findViewById(R.id.sin)
-        bSin.setBackgroundColor(getResources().getColor(colorResId))
+        bSin.setBackgroundColor(resources.getColor(colorResId))
         bCos = findViewById(R.id.cos)
-        bCos.setBackgroundColor(getResources().getColor(colorResId))
+        bCos.setBackgroundColor(resources.getColor(colorResId))
         bTan = findViewById(R.id.tan)
-        bTan.setBackgroundColor(getResources().getColor(colorResId))
+        bTan.setBackgroundColor(resources.getColor(colorResId))
         bLog = findViewById(R.id.log)
-        bLog.setBackgroundColor(getResources().getColor(colorResId))
+        bLog.setBackgroundColor(resources.getColor(colorResId))
         bLn = findViewById(R.id.ln)
-        bLn.setBackgroundColor(getResources().getColor(colorResId))
+        bLn.setBackgroundColor(resources.getColor(colorResId))
         bFact = findViewById(R.id.fact)
-        bFact.setBackgroundColor(getResources().getColor(colorResId))
+        bFact.setBackgroundColor(resources.getColor(colorResId))
         bSquare = findViewById(R.id.square)
-        bSquare.setBackgroundColor(getResources().getColor(colorResId))
+        bSquare.setBackgroundColor(resources.getColor(colorResId))
         bSqrt = findViewById(R.id.sqrt)
-        bSqrt.setBackgroundColor(getResources().getColor(colorResId))
+        bSqrt.setBackgroundColor(resources.getColor(colorResId))
         bInv = findViewById(R.id.inv)
-        bInv.setBackgroundColor(getResources().getColor(colorResId))
+        bInv.setBackgroundColor(resources.getColor(colorResId))
         bDiv = findViewById(R.id.div)
-        bDiv.setBackgroundColor(getResources().getColor(colorResId))
+        bDiv.setBackgroundColor(resources.getColor(colorResId))
         bMul = findViewById(R.id.mul)
-        bMul.setBackgroundColor(getResources().getColor(colorResId))
+        bMul.setBackgroundColor(resources.getColor(colorResId))
         bMin = findViewById(R.id.min)
-        bMin.setBackgroundColor(getResources().getColor(colorResId))
+        bMin.setBackgroundColor(resources.getColor(colorResId))
         bPlus = findViewById(R.id.plus)
-        bPlus.setBackgroundColor(getResources().getColor(colorResId))
+        bPlus.setBackgroundColor(resources.getColor(colorResId))
         bEqual = findViewById(R.id.equal)
-        bEqual.setBackgroundColor(getResources().getColor(colorResId))
+        bEqual.setBackgroundColor(resources.getColor(colorResId))
     }
 }
