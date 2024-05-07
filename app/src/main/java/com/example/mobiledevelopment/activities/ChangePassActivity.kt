@@ -117,15 +117,18 @@ class ChangePassActivity : AppCompatActivity() {
         bOK.setOnClickListener {
             val email = emailTV.text.toString()
             val newPassword = passwordET.text.toString()
-            if (changePassword(email, newPassword)) {
+            val ахуха = Regex("\\d{4}")
+
+            if (changePassword(email, newPassword) && ахуха.matches(newPassword)) {
                 Toast.makeText(this, "Пароль успешно изменен", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, PasswordActivity::class.java)
                 startActivity(intent)
                 finish()
+            } else if (!ахуха.matches(newPassword)){
+                Toast.makeText(this, "Некорректный пароль", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Почта не найдена", Toast.LENGTH_SHORT).show()
             }
-
         }
 
         applySavedTheme()
@@ -143,7 +146,12 @@ class ChangePassActivity : AppCompatActivity() {
         return false
     }
 
-
+    override fun onBackPressed() {
+        val i = Intent(this, PasswordActivity::class.java)
+        startActivity(i)
+        finish()
+        super.onBackPressed()
+    }
 
     private fun applyTheme(themeId: Int) {
         when (themeId) {

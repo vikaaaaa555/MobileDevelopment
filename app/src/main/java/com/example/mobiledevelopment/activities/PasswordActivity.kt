@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import com.example.mobiledevelopment.R
 import com.google.firebase.Firebase
@@ -20,7 +21,8 @@ class PasswordActivity : AppCompatActivity() {
 
     private lateinit var passwordET: EditText
 
-    private lateinit var bSignIn: Button
+    private lateinit var biometricPrompt: BiometricPrompt
+
     private lateinit var bForgotPass: Button
     private lateinit var bOne: Button
     private lateinit var bTwo: Button
@@ -36,10 +38,16 @@ class PasswordActivity : AppCompatActivity() {
     private lateinit var bOK: Button
     private lateinit var bFingerprint: ImageButton
 
+    private lateinit var intent: Intent
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password)
+
+        initializeButtonForBiometric()
+
+        intent = Intent(this, MainActivity::class.java)
 
         passwordET = findViewById(R.id.password_ed)
 
@@ -56,7 +64,6 @@ class PasswordActivity : AppCompatActivity() {
         bZero = findViewById(R.id.b_zero)
         bClear = findViewById(R.id.b_clear)
         bOK = findViewById(R.id.b_enter)
-        bFingerprint = findViewById(R.id.b_fingerprint)
 
         bOne.setOnClickListener {
             val value: String = passwordET.text.toString()
@@ -134,12 +141,43 @@ class PasswordActivity : AppCompatActivity() {
             finish()
         }
 
-        bFingerprint.setOnClickListener {
-
-        }
-
         applySavedTheme()
     }
+
+    private fun initializeButtonForBiometric() {
+
+        biometricPrompt = BiometricPrompt(this@PasswordActivity, ContextCompat.getMainExecutor(this),
+            object:androidx.biometric.BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                val cryptoObject = result.cryptoObject
+                startActivity(intent)
+                finish()
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                Toast.makeText(this@PasswordActivity, "Authentication error", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onAuthenticationFailed() {
+                Toast.makeText(this@PasswordActivity, "Error", Toast.LENGTH_SHORT).show()
+            }
+        }
+        )
+
+        bFingerprint = findViewById(R.id.b_fingerprint)
+
+        bFingerprint.setOnClickListener {
+            biometricPrompt.authenticate(createBiometricPromptInfo())
+        }
+    }
+
+    private fun createBiometricPromptInfo(): BiometricPrompt.PromptInfo {
+        return BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Authorization")
+            .setNegativeButtonText("Cancel")
+            .build()
+    }
+
 
 
     private fun checkPassword(password: String): Boolean {

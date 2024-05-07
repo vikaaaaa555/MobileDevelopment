@@ -33,10 +33,12 @@
         <activity
             android:name=".activities.RegistrationActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MobileDevelopment"/>
         <activity
             android:name=".activities.ChangePassActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MobileDevelopment"/>
         <activity
             android:name=".activities.HistoryActivity"
@@ -45,6 +47,7 @@
         <activity
             android:name=".activities.PasswordActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MobileDevelopment"/>
         <activity
             android:name=".activities.SplashActivity"
