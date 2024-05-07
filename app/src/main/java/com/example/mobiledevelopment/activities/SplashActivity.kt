@@ -1,6 +1,7 @@
 package com.example.mobiledevelopment.activities
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -23,10 +24,30 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this@SplashActivity, PasswordActivity/*MainActivity*/::class.java))
-            finish()
-        }, 2000)
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val isRegistered = sharedPreferences.getBoolean("isRegistered", false)
+
+        if (isRegistered) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                startActivity(
+                    Intent(
+                        this@SplashActivity,
+                        PasswordActivity/*MainActivity*/::class.java
+                    )
+                )
+                finish()
+            }, 2000)
+        } else {
+            Handler(Looper.getMainLooper()).postDelayed({
+                startActivity(
+                    Intent(
+                        this@SplashActivity,
+                        RegistrationActivity/*MainActivity*/::class.java
+                    )
+                )
+                finish()
+            }, 2000)
+        }
 
         applySavedTheme()
     }

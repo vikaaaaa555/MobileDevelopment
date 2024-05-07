@@ -31,6 +31,14 @@
             android:exported="false"
             android:theme="@style/Theme.MobileDevelopment"/>
         <activity
+            android:name=".activities.RegistrationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MobileDevelopment"/>
+        <activity
+            android:name=".activities.ChangePassActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MobileDevelopment"/>
+        <activity
             android:name=".activities.HistoryActivity"
             android:exported="false"
             android:theme="@style/Theme.MobileDevelopment"/>
